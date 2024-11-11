@@ -1,0 +1,426 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>Games</title>
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg-dull);
+        }
+        .game-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E2E2E;
+        }
+        #question {
+            color: #2E2E2E;
+            font-size: 24px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        #answer {
+
+            font-size: 18px;
+            text-align: center;
+        }
+        button {
+            font-size: 18px;
+            /* padding: 10px 15px; */
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            /* background-color: #007bff; */
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #result {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #2E2E2E;
+        }
+        #score-timer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        #history-container {
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .history-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: #e9ecef;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item button {
+            font-size: 18px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+        #how-to-play-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        h2 {
+            margin-bottom: 12px;
+            color: #2E2E2E;
+        }
+        #how-to-play-popup p, #how-to-play-popup ul, #how-to-play-popup ol {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        #how-to-play-popup button {
+            font-size: 18px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <br>
+
+    <div class="game-container">
+        <h1>Atbash Game</h1>
+        
+        <button id="how-to-play-button">How to Play</button>
+        <div id="how-to-play-popup">
+            <h2>How to Play</h2>
+            <p>In this game, you'll be asked to decode letters using the Atbash cipher.</p>
+            <p>Each letter is replaced by its reverse in the alphabet (A↔Z, B↔Y, C↔X, etc.).</p>
+            <p>You have 35 seconds to answer each question. Type your answer and hit "Submit".</p>
+            <p>Good luck!</p>
+            <button id="close-how-to-play">Close</button>
+        </div>
+        
+        <div id="question"></div>
+        <input type="text" id="answer" placeholder="Your answer">
+        
+        <div id="score-timer-container">
+            <div id="score">Score: 0</div>
+            <div id="timer">Time left: 35s</div>
+        </div>
+        
+        <div style="display: flex; justify-content: center;">
+            <button id="submit">Submit</button>
+            <button id="hint">Hint</button>
+        </div>
+        
+        <div id="result"></div>
+        <button id="history-button">View History</button>
+        <button id="clear-history">Clear History</button>
+        <button id="replay" style="display:none;">Replay</button>
+    </div>
+
+    <div id="history-container" style="display:none;">
+        <h2>Game History</h2>
+        <ul id="history-list"></ul>
+        <button id="close-history">Close</button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/nav.js"></script>
+    <script src="../assets/js/load.js"></script>
+    <script>
+        let score = 0;
+        let currentQuestion = 0;
+        const totalQuestions = 10;
+        let timer;
+        let timeLeft = 35;
+        const questions = [
+            { question: 'A', answer: 'Z' },
+            { question: 'B', answer: 'Y' },
+            { question: 'C', answer: 'X' },
+            { question: 'D', answer: 'W' },
+            { question: 'E', answer: 'V' },
+            { question: 'F', answer: 'U' },
+            { question: 'G', answer: 'T' },
+            { question: 'H', answer: 'S' },
+            { question: 'I', answer: 'R' },
+            { question: 'J', answer: 'Q' }
+        ];
+        let history = [];
+
+        const questionEl = document.getElementById('question');
+        const answerEl = document.getElementById('answer');
+        const scoreEl = document.getElementById('score');
+        const timerEl = document.getElementById('timer');
+        const resultEl = document.getElementById('result');
+        const replayButton = document.getElementById('replay');
+        const historyButton = document.getElementById('history-button');
+        const clearHistoryButton = document.getElementById('clear-history');
+        const hintButton = document.getElementById('hint');
+        const historyContainer = document.getElementById('history-container');
+        const historyList = document.getElementById('history-list');
+        const howToPlayButton = document.getElementById('how-to-play-button');
+        const howToPlayPopup = document.getElementById('how-to-play-popup');
+        const closeHowToPlayButton = document.getElementById('close-how-to-play');
+        const closeHistoryButton = document.getElementById('close-history');
+
+        function startGame() {
+            score = 0;
+            currentQuestion = 0;
+            nextQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                questionEl.innerText = `Decode: ${questions[currentQuestion].question}`;
+                answerEl.value = '';
+                resultEl.innerText = '';
+                timeLeft = 35;
+                timerEl.innerText = `Time left: ${timeLeft}s`;
+                hintButton.style.display = 'block';
+                startTimer();
+            } else {
+                endGame();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                timerEl.innerText = `Time left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    checkAnswer('');
+                }
+            }, 1000);
+        }
+
+        function checkAnswer(userAnswer) {
+            clearInterval(timer);
+            const correctAnswer = questions[currentQuestion].answer;
+            if (userAnswer === correctAnswer) {
+                score++;
+                resultEl.innerText = 'Correct! 🎉';
+            } else {
+                resultEl.innerText = `Wrong! 😢 Correct answer was ${correctAnswer}`;
+            }
+            saveHistory();
+            currentQuestion++;
+            setTimeout(nextQuestion, 2000);
+        }
+
+        function saveHistory() {
+            history.push({ score: score, date: new Date().toLocaleString(), question: questions[currentQuestion].question });
+            localStorage.setItem('gameHistory', JSON.stringify(history));
+        }
+
+        function endGame() {
+            scoreEl.innerText = `Final Score: ${score}`;
+            replayButton.style.display = 'block';
+            showHistory(); // Show history at the end of the game
+        }
+
+        function showHistory() {
+            historyContainer.style.display = 'block';
+            historyList.innerHTML = '';
+            history.forEach((entry) => {
+                const li = document.createElement('li');
+                li.classList.add('history-item');
+                li.innerText = `Date: ${entry.date}, Score: ${entry.score}, Question: ${entry.question}`;
+                
+                // Create delete button for each history item
+                const deleteButton = document.createElement('button');
+                deleteButton.innerText = 'Delete';
+                deleteButton.onclick = () => deleteHistoryItem(entry);
+                li.appendChild(deleteButton);
+                
+                historyList.appendChild(li);
+            });
+        }
+
+        function deleteHistoryItem(entry) {
+            history = history.filter(h => h !== entry);
+            localStorage.setItem('gameHistory', JSON.stringify(history));
+            showHistory(); // Refresh history display
+        }
+
+        function clearHistory() {
+            history = [];
+            localStorage.removeItem('gameHistory');
+            historyList.innerHTML = ''; // Clear displayed history
+            alert('History cleared!');
+        }
+
+        function handleHint() {
+            alert(`Hint: The answer is the Atbash cipher equivalent of ${questionEl.innerText.slice(-1)}`);
+        }
+
+        // Event listeners
+        document.getElementById('submit').addEventListener('click', () => {
+            checkAnswer(answerEl.value.toUpperCase());
+        });
+
+        historyButton.addEventListener('click', () => {
+            showHistory();
+        });
+
+        clearHistoryButton.addEventListener('click', clearHistory);
+
+        hintButton.addEventListener('click', handleHint);
+
+        howToPlayButton.addEventListener('click', () => {
+            howToPlayPopup.style.display = 'block';
+        });
+
+        closeHowToPlayButton.addEventListener('click', () => {
+            howToPlayPopup.style.display = 'none';
+        });
+
+        closeHistoryButton.addEventListener('click', () => {
+            historyContainer.style.display = 'none';
+        });
+
+        replayButton.addEventListener('click', () => {
+            startGame();
+            replayButton.style.display = 'none';
+            historyContainer.style.display = 'none'; // Hide history on replay
+        });
+
+        // Load history from local storage on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const storedHistory = localStorage.getItem('gameHistory');
+            if (storedHistory) {
+                history = JSON.parse(storedHistory);
+            }
+            startGame();
+        });
+    </script>
+</body>
+</html>

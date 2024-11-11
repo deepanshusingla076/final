@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>PAYMENT</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: var(--bg);
+        }
+        .payment-container {
+            background-color: var(--bg);
+            border-radius: 12px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            width: 650px;
+            padding: 40px 70px;
+            text-align: center;
+        }
+        .payment-container h2 {
+            font-size: 25px;
+            color: #2E2E2E;
+            margin-bottom: 30px;
+        }
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 25   px;
+        }
+        .payment-icons img {
+            max-width: 120px;
+            margin: 0 10px;
+        }
+        .payment-container form {
+            display: flex;
+            flex-direction: column;
+        }
+        .payment-container input {
+            margin: 10px 0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border 0.3s;
+            width: 93%;
+            padding: 12px 15px;
+            border: 1px solid var(--bg);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            color: black;
+        }
+        .payment-container input::placeholder {
+            color: var(--primary);
+        }
+        .payment-container button {
+            width: 93%;
+            color: rgb(17, 17, 17);
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="pay.html">
+                    <button id="" class="menuOption menu-settings">
+                        <i class="fas fa-cart-shopping menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+<div class="payment-container">
+    <h2>Course Enrollment Payment</h2>
+    <div class="payment-icons">
+        <img src="imgcards.png" alt="Accepted Cards">
+    </div>
+    <form id="paymentForm" action="final.html" method="GET">
+        <input type="text" id="name" placeholder="Account Holder Name" required>
+        <input type="text" id="cardNumber" placeholder="Card Number" required maxlength="19" oninput="formatCardNumber(this)">
+        <input type="text" id="expiryDate" placeholder="Expiry Date (MM/YY)" required maxlength="5" oninput="formatExpiryDate(this)">
+        <input type="text" id="cvv" placeholder="CVV (3 digits)" required maxlength="3">
+        <button type="submit">Submit Payment</button>
+    </form>
+</div>
+
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/jquery.scrolly.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/load.js"></script>
+<script>
+    function formatCardNumber(input) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length > 16) value = value.substring(0, 16);
+        input.value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+    }
+
+    function formatExpiryDate(input) {
+        let value = input.value.replace(/\D/g, '');
+        if (value.length > 4) value = value.substring(0, 4);
+        input.value = value.replace(/(\d{2})(?=\d)/g, '$1/');
+    }
+</script>
+
+</body>
+</html>

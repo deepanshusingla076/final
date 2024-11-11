@@ -1,0 +1,152 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Hill Cipher Encryption</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="default.css" />
+</head>
+    <body>
+        <nav id="menu" class="menu">
+            <div class="actionbar">
+                <div class="menu-actionbar-div">
+                    <button id="menuBtn" class="menu-btn">
+                        <i class="fas fa-bars menu-icon"></i>
+                    </button>
+                    <h3 class="menuText actionbar-title">Dashboard</h3>
+                </div>
+            </div>
+            <ul class="optionsBar">
+                <li class="menuItem">
+                    <a href="../index.html" class="menuOption menu-home">
+                        <i class="fas fa-home menu-icon"></i>
+                        <h5 class="menuText menu-label">Home</h5>
+                    </a>
+                </li>
+                <li class="menuBreak">
+                    <hr class="menu-hr">
+                </li>
+                <li class="menuItem">
+                    <a href="../content.html">
+                        <button id="productManagerBtn" class="menuOption menu-product">
+                            <i class="fa-solid fa-book menu-icon"></i>
+                            <h5 class="menuText menu-label">Content</h5>
+                        </button>
+                    </a>
+                </li>
+                <li class="menuItem">
+                    <a href="../games.html">
+                        <button id="productManagerBtn" class="menuOption menu-game">
+                            <i class="fa-solid fa-gamepad menu-icon"></i>
+                            <h5 class="menuText menu-label">Games</h5>
+                        </button>
+                    </a>
+                </li>
+                <li class="menuItem">
+                    <a href="../community.html">
+                        <button id="yohoho" class="menuOption menu-community">
+                            <i class="fa-solid fa-users menu-icon"></i>
+                            <h5 class="menuText menu-label">Community</h5>
+                        </button>
+                    </a>
+                </li>
+                <li class="menuItem">
+                    <a href="../pay/pay.html">
+                        <button id="orderManagerBtn" class="menuOption menu-settings">
+                            <i class="fas fa-user-plus menu-icon"></i>
+                            <h5 class="menuText menu-label">Enroll</h5>
+                        </button>
+                    </a>
+                </li>
+                <li class="menuItem">
+                    <a href="../settings.html">
+                        <button id="orderManagerBtn" class="menuOption menu-settings">
+                            <i class="fa-solid fa-gear menu-icon"></i>
+                            <h5 class="menuText menu-label">Settings</h5>
+                        </button>
+                    </a>
+                </li>
+            </ul>
+            <div class="menuUser">
+                <a href="../dashboard.html" class="menu-user-link">
+                    <div class="user-avatar">
+                        <img src="../images/user.jpg" alt="User Image">
+                    </div>
+                    <h5 class="Username menuText">A. Maurya</h5>
+                    <p class="menuText menu-chevron">
+                        <i class="fas fa-chevron-right"></i>
+                    </p>
+                </a>
+            </div>
+            <div class="themeBar">
+                <div class="theme-wrapper">
+                    <button id="themeChangeBtn" class="theme-btn">
+                        <i class="fas theme-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+    <div id="app">
+    <div id="star-container">
+      <div id="star-pattern"></div>
+      <div id="star-gradient-overlay"></div>
+    </div>
+    <div id="stripe-container">
+      <div id="stripe-pattern"></div>
+    </div>
+    
+    <div id="modal-wrapper">
+      <div id="modal">
+        <div id="modal-background"></div>
+        <div id="modal-content">
+          <div id="modal-message">
+            <h1 class="sixty-four-font">One Pad Game</h1>
+          </div>
+          <div id="modal-actions">
+            <button type="button" class="modal-action">
+                <div class="modal-action-pattern"></div>
+                <div class="modal-action-fade"></div>
+                <span class="modal-action-text inter-font">Submit Answer</span>
+              </button>
+              <button type="button" class="modal-action">
+                <div class="modal-action-pattern"></div>
+                <div class="modal-action-fade"></div>
+                <span class="modal-action-text inter-font">Save result</span>
+              </button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="magic-mouse-container"></div>
+  
+  <div id="cursor">
+    <img 
+      src="../images/games/Cursor.webp" 
+      alt="Arrow Cursor" 
+    />
+    <div id="cursor-eyes">
+      <div class="cursor-eye"></div>
+      <div class="cursor-eye"></div>
+    </div>
+  </div>
+  <script = src="default.js"></script>
+  <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/nav.js"></script>
+    <script src="../assets/js/load.js"></script>
+</body>
+</html>

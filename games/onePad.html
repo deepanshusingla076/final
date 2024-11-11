@@ -1,0 +1,430 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>Games</title>
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: var(--bg-dull);
+            margin-top: 30px;
+        }
+
+        .game-container {
+            text-align: center;
+            background: var(--bg);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            color: #2E2E2E;
+        }
+
+        #word-container {
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            color: var(--highlight-color);
+            margin-bottom: 10px;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        #word-container.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .how-to-play-btn, .save-btn, .replay-btn, .history-btn, .clear-btn {
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        #question {
+            font-size: 24px;
+            margin: 20px 0;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        #guess-input {
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: auto;
+        }
+        button {
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        #resultMessage {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-top: 10px;
+        }
+
+        .hint {
+            font-size: 16px;
+            color: #d9534f;
+            margin-top: 10px;
+        }
+
+        #history-container {
+            text-align: left;
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            display: none;
+        }
+
+        .history-item {
+            margin-bottom: 10px;
+            padding: 5px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #888;
+        }
+
+        #howToPlayModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+
+        #howToPlayModal h2 {
+            margin-bottom: 10px;
+            color: #2E2E2E;
+        }
+
+        #howToPlayModal p,
+        #howToPlayModal ul,
+        #howToPlayModal ol {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        #howToPlayModal button {
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <br>
+    <div class="game-container">
+        <h1>One-Time Pad Cipher</h1>
+        <button class="how-to-play-btn" onclick="openModal()">How to Play</button>
+    
+        <div id="howToPlayModal">
+            <div class="modal-content">
+                <h2>How to Play</h2>
+                <p><strong>Objective:</strong> Decrypt the given encrypted messages using the provided keys.</p>
+                <h3>Gameplay:</h3>
+                <ul>
+                    <li>Each round presents you with a question to decrypt a word or answer.</li>
+                    <li>You will receive a randomly generated key for each question.</li>
+                    <li>Type your answer in the input field and click "Submit Answer."</li>
+                </ul>
+                <h3>Controls:</h3>
+                <ul>
+                    <li><strong>Submit Answer:</strong> Click the "Submit Answer" button after typing your guess.</li>
+                    <li><strong>Replay:</strong> Click the "Replay" button to start a new game after finishing.</li>
+                    <li><strong>Show History:</strong> Click the "Show History" button to view your previous scores.</li>
+                    <li><strong>Clear History:</strong> Click the "Clear History" button to remove your score records.</li>
+                </ul>
+                <h3>Scoring:</h3>
+                <ul>
+                    <li>Correct answers earn you points.</li>
+                    <li>Incorrect answers will reveal the correct answer.</li>
+                </ul>
+                <h3>End of Game:</h3>
+                <ul>
+                    <li>Your final score will be displayed after all questions are answered.</li>
+                    <li>You can save your result and view your game history.</li>
+                </ul>
+                <h3>Tips:</h3>
+                <ul>
+                    <li>Pay attention to the keys and hints provided for each question.</li>
+                    <li>Practice makes perfect; try different words to improve your skills!</li>
+                </ul>
+                <button onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    
+        <div id="word-container"></div>
+        <div id="input-container">
+            <input type="text" id="guess-input" placeholder="Your answer here..." /><br>
+            <button onclick="submitAnswer()">Submit Answer</button>
+        </div>
+        <p id="resultMessage"></p>
+        <p class="hint" id="hintMessage"></p>
+        <button class="save-btn" onclick="saveResult()">Save Result</button>
+        <button class="replay-btn" style="display:none;" onclick="replayGame()">Replay</button>
+        <button class="history-btn" onclick="showHistory()">Show History</button>
+        <button class="clear-btn" onclick="clearHistory()">Clear History</button>
+        <div id="history-container"></div>
+        <div class="copyright">© 2024 Cipher Game. Have fun!</div>
+    </div>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/nav.js"></script>
+    <script src="../assets/js/load.js"></script>
+    <script>
+        const questions = [
+            "Encrypt this word: CAT",
+            "Encrypt this word: HELLO",
+            "What is the capital of France?",
+            "Name the largest planet in our solar system.",
+            "What is the hardest natural substance on Earth?"
+        ];
+        let correctAnswers = ["DOG", "XMCKL", "PARIS", "JUPITER", "DIAMOND"];
+        let currentQuestionIndex = 0;
+        let currentKey = '';
+        let encryptedMessages = [];
+        let score = 0;
+
+        function openModal() {
+            document.getElementById("howToPlayModal").style.display = "block";
+        }
+
+        function displayQuestion() {
+            const wordContainer = document.getElementById("word-container");
+            wordContainer.classList.remove("show");
+            setTimeout(() => {
+                wordContainer.textContent = questions[currentQuestionIndex];
+                wordContainer.classList.add("show");
+            }, 100);
+
+            generateKeyAndEncrypt();
+        }
+
+        function generateKeyAndEncrypt() {
+            const originalWord = correctAnswers[currentQuestionIndex];
+            currentKey = generateRandomKey(originalWord.length);
+            encryptedMessages[currentQuestionIndex] = encryptMessage(originalWord, currentKey);
+            displayHint();
+        }
+
+        function generateRandomKey(length) {
+            let key = '';
+            for (let i = 0; i < length; i++) {
+                key += String.fromCharCode(Math.floor(Math.random() * 26) + 65);
+            }
+            return key;
+        }
+
+        function encryptMessage(message, key) {
+            let encrypted = '';
+            for (let i = 0; i < message.length; i++) {
+                const msgChar = message.charCodeAt(i) - 65;
+                const keyChar = key.charCodeAt(i) - 65;
+                const encryptedChar = (msgChar + keyChar) % 26;
+                encrypted += String.fromCharCode(encryptedChar + 65);
+            }
+            return encrypted;
+        }
+
+        function displayHint() {
+            const hintMessage = `Hint: To solve the question, remember the following:<br>
+                - Your key is: "${currentKey}".<br>
+                - The encrypted message is: "${encryptedMessages[currentQuestionIndex]}".<br>
+                - Use A=0, B=1, ..., Z=25 for letters.`;
+            document.getElementById("hintMessage").innerHTML = hintMessage;
+        }
+
+        function submitAnswer() {
+            const userInput = document.getElementById("guess-input").value.toUpperCase();
+            if (userInput === correctAnswers[currentQuestionIndex]) {
+                score++;
+                document.getElementById("resultMessage").textContent = "Correct! Your score is: " + score;
+            } else {
+                document.getElementById("resultMessage").textContent = "Wrong! The correct answer was: " + correctAnswers[currentQuestionIndex];
+            }
+            document.getElementById("guess-input").value = '';
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                document.getElementById("resultMessage").textContent += ` Final score: ${score}/${questions.length}`;
+                document.getElementById("guess-input").disabled = true;
+                document.querySelector('.replay-btn').style.display = 'block';
+            }
+        }
+
+        function saveResult() {
+            let gameHistory = localStorage.getItem('gameHistory') ? JSON.parse(localStorage.getItem('gameHistory')) : [];
+            const newResult = { score: score, date: new Date().toLocaleString() };
+            gameHistory.push(newResult);
+            localStorage.setItem('gameHistory', JSON.stringify(gameHistory));
+            alert('Result saved!');
+        }
+
+        function showHistory() {
+            let history = JSON.parse(localStorage.getItem('gameHistory'));
+            const historyContainer = document.getElementById("history-container");
+            historyContainer.innerHTML = '';
+            if (!history || history.length === 0) {
+                historyContainer.innerHTML = '<p>No history found.</p>';
+            } else {
+                history.forEach((result, index) => {
+                    historyContainer.innerHTML += `<div class="history-item">
+                        <strong>Game ${index + 1}:</strong> Score: ${result.score}, Date: ${result.date}
+                    </div>`;
+                });
+            }
+            historyContainer.style.display = 'block';
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('gameHistory');
+            alert('History cleared!');
+            document.getElementById("history-container").innerHTML = '';
+        }
+
+        function replayGame() {
+            score = 0;
+            currentQuestionIndex = 0;
+            document.getElementById("resultMessage").textContent = '';
+            document.getElementById("guess-input").disabled = false;
+            document.querySelector('.replay-btn').style.display = 'none';
+            displayQuestion();
+        }
+
+        function closeModal() {
+            document.getElementById("howToPlayModal").style.display = "none";
+        }
+
+        displayQuestion();
+    </script>
+</body>
+</html>

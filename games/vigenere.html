@@ -1,0 +1,479 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title> Cipher</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top:30px;
+        }
+        .game-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E2E2E;
+        }
+        #plaintext, #key {
+            color: #2E2E2E;
+            font-size: 24px;
+            margin: 10px 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-weight: 550;
+        }
+        #answer {
+
+font-size: 18px;
+text-align: center;
+margin-bottom: 20px;
+}
+        button {
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #feedback {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #2E2E2E;
+        }
+        #history-container {
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .history-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: #e9ecef;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item button {
+            color: white;
+            padding: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        #game-over-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        #how-to-play-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #2E2E2E;
+        }
+        #how-to-play-popup p, #how-to-play-popup ul, #how-to-play-popup ol {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        #how-to-play-popup button {
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #timer {
+            font-size: 18px;
+            margin-top: 10px;
+            color: #2E2E2E;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <br>
+<div class="game-container">
+    <h1>Vigenere Cipher Game</h1>
+    <button onclick="showHowToPlay()">How to Play</button>
+    <div id="plaintext"></div>
+    <div id="key"></div>
+    <input type="text" id="answer" placeholder="Your answer here..." />
+    <button onclick="submitAnswer()">Submit Answer</button>
+    <button onclick="showHint()">Hint</button>
+    <div id="feedback"></div>
+    <div id="timer">Time left: <span id="time-left">30</span> seconds</div>
+    <div id="history-container"></div>
+    <button onclick="showHistory()">Show History</button>
+    <button onclick="clearHistory()">Clear History</button>
+</div>
+
+<div id="game-over-popup">
+    <h2>Game Over!</h2>
+    <p id="final-message"></p>
+    <p id="total-score"></p>
+    <button onclick="closePopup()">Replay Game</button>
+</div>
+
+<div id="how-to-play-popup">
+    <h2>How to Play</h2>
+    <p>In this game, you will be given a plaintext message and a key.</p>
+    <p>Your task is to encrypt the plaintext using the Vigenère cipher with the provided key.</p>
+    <p>The Vigenère cipher uses the following formula:</p>
+    <p><strong>C = (P + K) mod 26</strong></p>
+    <p>Where:</p>
+    <ul>
+        <li><strong>C</strong> = Ciphertext letter</li>
+        <li><strong>P</strong> = Plaintext letter (converted to a number: A=0, B=1, ..., Z=25)</li>
+        <li><strong>K</strong> = Key letter (also converted to a number)</li>
+    </ul>
+    <p>To encrypt a message, follow these steps:</p>
+    <ol>
+        <li>Align the plaintext with the key, repeating the key as necessary.</li>
+        <li>Convert each letter to its corresponding number (A=0, B=1, ..., Z=25).</li>
+        <li>Apply the formula to get the ciphertext.</li>
+    </ol>
+    <p><strong>Example:</strong></p>
+    <p>If your plaintext is <strong>"HELLO"</strong> and your key is <strong>"KEY"</strong>, you would do the following:</p>
+    <ul>
+        <li>Align the plaintext with the key:</li>
+        <pre>
+        H E L L O
+        K E Y K E
+        </pre>
+        <li>Convert letters to numbers:</li>
+        <pre>
+        7  4 11 11 14  (H=7, E=4, L=11, O=14)
+        10 4 24 10 4  (K=10, E=4, Y=24)
+        </pre>
+        <li>Apply the formula:</li>
+        <pre>
+        (7 + 10) mod 26 = 17 (R)
+        (4 + 4) mod 26 = 8  (I)
+        (11 + 24) mod 26 = 9 (J)
+        (11 + 10) mod 26 = 21 (V)
+        (14 + 4) mod 26 = 18 (S)
+        </pre>
+        <li>The resulting ciphertext is <strong>"RIJVS"</strong>.</li>
+    </ul>
+    <p>Type your answer in the input box and click "Submit Answer". If you get stuck, you can click "Hint" to reveal the first letter of the correct answer.</p>
+    <p>Good luck!</p>
+    <button onclick="closeHowToPlay()">Close</button>
+</div>
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/jquery.scrolly.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/load.js"></script>
+<script>
+const questions = [
+    { plaintext: "HELLO", key: "KEY" },
+    { plaintext: "WORLD", key: "CAT" },
+    { plaintext: "CRYPTO", key: "DOG" },
+    { plaintext: "VIGENERE", key: "FUN" },
+    { plaintext: "CIPHER", key: "SUN" },
+    { plaintext: "KIDS", key: "PLAY" },
+    { plaintext: "CODE", key: "GAME" },
+    { plaintext: "ENCRYPT", key: "TREE" },
+    { plaintext: "DECRYPT", key: "APPLE" },
+    { plaintext: "PUZZLE", key: "BOY" }
+];
+
+let currentQuestionIndex = 0;
+let history = JSON.parse(localStorage.getItem('history')) || [];
+let score = 0;
+let timerInterval;
+const timeLimit = 30;
+let timeLeft = timeLimit;
+
+const plaintextEl = document.getElementById('plaintext');
+const keyEl = document.getElementById('key');
+const answerInput = document.getElementById('answer');
+const feedbackEl = document.getElementById('feedback');
+const historyList = document.getElementById('history-container');
+const popup = document.getElementById('game-over-popup');
+const finalMessageEl = document.getElementById('final-message');
+const totalScoreEl = document.getElementById('total-score');
+const timeLeftEl = document.getElementById('time-left');
+const howToPlayPopup = document.getElementById('how-to-play-popup');
+
+function displayQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    plaintextEl.textContent = `Plaintext: ${currentQuestion.plaintext}`;
+    keyEl.textContent = `Key: ${currentQuestion.key}`;
+    plaintextEl.style.opacity = 0;
+    keyEl.style.opacity = 0;
+    setTimeout(() => {
+        plaintextEl.style.opacity = 1;
+        keyEl.style.opacity = 1;
+    }, 50);
+    answerInput.value = '';
+    feedbackEl.textContent = '';
+    timeLeft = timeLimit;
+    updateTimerDisplay();
+    startTimer();
+}
+
+function startTimer() {
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        updateTimerDisplay();
+        if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            feedbackEl.textContent = "Time's up!";
+            const correctAnswer = vigenereCipher(questions[currentQuestionIndex].plaintext, questions[currentQuestionIndex].key);
+            saveToHistory(questions[currentQuestionIndex].plaintext, questions[currentQuestionIndex].key, '', correctAnswer);
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                endGame("You've completed all questions!");
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    timeLeftEl.textContent = timeLeft;
+}
+
+function vigenereCipher(plaintext, key) {
+    let cipherText = '';
+    const aCode = 'A'.charCodeAt(0);
+    for (let i = 0; i < plaintext.length; i++) {
+        let p = plaintext[i].charCodeAt(0) - aCode;
+        let k = key[i % key.length].charCodeAt(0) - aCode;
+        cipherText += String.fromCharCode(((p + k) % 26) + aCode);
+    }
+    return cipherText;
+}
+
+function submitAnswer() {
+    clearInterval(timerInterval);
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctAnswer = vigenereCipher(currentQuestion.plaintext, currentQuestion.key);
+    const userAnswer = answerInput.value.toUpperCase();
+
+    const feedbackAnimation = (isCorrect) => {
+        feedbackEl.classList.add(isCorrect ? 'correct' : 'incorrect');
+        setTimeout(() => {
+            feedbackEl.classList.remove(isCorrect ? 'correct' : 'incorrect');
+        }, 1000);
+    };
+
+    if (userAnswer === correctAnswer) {
+        score++;
+        feedbackEl.textContent = "Correct!";
+        feedbackAnimation(true);
+    } else {
+        feedbackEl.textContent = `Incorrect! Correct answer is: ${correctAnswer}`;
+        feedbackAnimation(false);
+    }
+
+    saveToHistory(currentQuestion.plaintext, currentQuestion.key, userAnswer, correctAnswer);
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        displayQuestion();
+    } else {
+        endGame("You've completed all questions!");
+    }
+}
+
+function endGame(message) {
+    clearInterval(timerInterval);
+    finalMessageEl.textContent = message;
+    totalScoreEl.textContent = `Your score: ${score}/${questions.length}`;
+    popup.style.display = 'block';
+}
+
+function closePopup() {
+    popup.style.display = 'none';
+    replayGame();
+}
+
+function replayGame() {
+    currentQuestionIndex = 0;
+    score = 0;
+    displayQuestion();
+    historyList.style.display = 'none';
+}
+
+function saveToHistory(plaintext, key, userAnswer, correctAnswer) {
+    history.push({ plaintext, key, userAnswer, correctAnswer });
+    localStorage.setItem('history', JSON.stringify(history));
+}
+
+function showHistory() {
+    historyList.innerHTML = '';
+    history.forEach((item, index) => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `Q${index + 1}: ${item.plaintext} (Key: ${item.key}) - Your Answer: ${item.userAnswer}, Correct: ${item.correctAnswer}`;
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteHistoryItem(index);
+        historyItem.appendChild(deleteButton);
+        historyList.appendChild(historyItem);
+    });
+    historyList.style.display = 'block';
+}
+
+function clearHistory() {
+    history = [];
+    localStorage.removeItem('history');
+    historyList.style.display = 'none';
+}
+
+function deleteHistoryItem(index) {
+    history.splice(index, 1);
+    localStorage.setItem('history', JSON.stringify(history));
+    showHistory();
+}
+
+function showHint() {
+    const currentQuestion = questions[currentQuestionIndex];
+    const firstLetter = vigenereCipher(currentQuestion.plaintext, currentQuestion.key)[0];
+    feedbackEl.innerHTML = `Hint: The first letter of the answer is <strong>${firstLetter}</strong>.`;
+}
+
+
+function showHowToPlay() {
+    howToPlayPopup.style.display = 'block';
+}
+
+function closeHowToPlay() {
+    howToPlayPopup.style.display = 'none';
+}
+
+displayQuestion();
+</script>
+</body>
+</html>

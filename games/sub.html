@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Substitution Cipher Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f8ff;
+        }
+
+        .game-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #4b0082;
+            font-size: 1.8em;
+            margin-bottom: 0.5em;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .input-container input,
+        .input-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #f9f9f9;
+        }
+
+        .btn {
+            font-size: 16px;
+            cursor: pointer;
+            padding: 10px 20px;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+            border-radius: 5px;
+            margin: 10px 5px 0;
+        }
+
+        #outputMessage {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Substitution Cipher Game</h1>
+        <p>Enter a message to encode or decode using a substitution cipher:</p>
+        
+        <div class="input-container">
+            <textarea id="message" rows="4" placeholder="Enter your message here..."></textarea>
+            <input type="text" id="key" placeholder="Enter a 26-letter key (e.g., QWERTYUIOPASDFGHJKLZXCVBNM)" maxlength="26" />
+            <button class="btn" onclick="encodeMessage()">Encode Message</button>
+            <button class="btn" onclick="decodeMessage()">Decode Message</button>
+        </div>
+        
+        <p id="outputMessage"></p>
+    </div>
+
+    <script>
+        function validateKey(key) {
+            if (key.length !== 26 || new Set(key.toUpperCase()).size !== 26) {
+                alert("The key must be a unique 26-letter combination.");
+                return false;
+            }
+            return true;
+        }
+
+        function encodeMessage() {
+            const message = document.getElementById("message").value;
+            const key = document.getElementById("key").value.toUpperCase();
+
+            if (!validateKey(key)) return;
+
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let encodedMessage = "";
+
+            for (let char of message.toUpperCase()) {
+                const index = alphabet.indexOf(char);
+                if (index !== -1) {
+                    encodedMessage += key[index];
+                } else {
+                    encodedMessage += char;
+                }
+            }
+
+            document.getElementById("outputMessage").textContent = "Encoded Message: " + encodedMessage;
+        }
+
+        function decodeMessage() {
+            const message = document.getElementById("message").value;
+            const key = document.getElementById("key").value.toUpperCase();
+
+            if (!validateKey(key)) return;
+
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let decodedMessage = "";
+
+            for (let char of message.toUpperCase()) {
+                const index = key.indexOf(char);
+                if (index !== -1) {
+                    decodedMessage += alphabet[index];
+                } else {
+                    decodedMessage += char;
+                }
+            }
+
+            document.getElementById("outputMessage").textContent = "Decoded Message: " + decodedMessage;
+        }
+    </script>
+</body>
+</html>

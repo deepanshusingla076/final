@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .thank-you-container {
+            background-color: var(--bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            text-align: center;
+            padding: 60px 40px 40px;
+            display: none;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .thank-you-container.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .thank-you-container h2,
+        .thank-you-container p,
+        .thank-you-container button {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease 0.5s, transform 0.5s ease;
+        }
+        .thank-you-container.show h2,
+        .thank-you-container.show p,
+        .thank-you-container.show button {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .thank-you-container h2 {
+            color: var(--accent);
+            margin: 20px 0 10px;
+        }
+        .thank-you-container p {
+            color: var(--primary);
+            margin-bottom: 30px;
+        }
+        .thank-you-container button {
+            background-color: var(--accent);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .thank-you-container button:hover {
+            background-color: var(--accent);
+        }
+        .checkmark {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--accent);
+            border: 5px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: scaleIn 0.5s ease;
+        }
+        .checkmark svg {
+            width: 30px;
+            height: 30px;
+            fill: var(--bg);
+        }
+        @keyframes scaleIn {
+            0% {
+                transform: scale(0);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="thank-you-container" id="thankYouContainer">
+    <div class="checkmark">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M9 19l-7-7 1.41-1.41L9 16.17l11.59-11.59L22 6l-13 13z"/>
+        </svg>
+    </div>
+    <h2>Payment Successful!</h2>
+    <p>Your payment has been successfully processed. Thank you for your purchase!</p>
+    <button onclick="window.location.href='../index.html'">OK</button>
+</div>
+
+<script>
+    function showThankYouMessage() {
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const container = document.getElementById('thankYouContainer');
+                container.classList.add('show');
+                resolve();
+            }, 3000);
+        }).then(() => {
+            setTimeout(() => {
+                window.location.href = '../index.html';
+            }, 5000);
+        });
+    }
+
+    showThankYouMessage();
+</script>
+
+</body>
+</html>

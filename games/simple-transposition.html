@@ -1,0 +1,258 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Simple Transposition Cipher</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="default.css" />
+</head>
+<style>
+    .label-class{
+        font-size: 15px;
+        color: #fff;
+        margin-bottom: 0px;
+    }
+    #key{
+        cursor: pointer;
+    }
+    #plain-text{
+        cursor: pointer;
+    }
+</style>
+<body>
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button class="menuOption menu-product">
+                        <i class="fas fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button class="menuOption menu-game">
+                        <i class="fas fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button class="menuOption menu-community">
+                        <i class="fas fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button class="menuOption menu-settings">
+                        <i class="fas fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app">
+        <div id="star-container">
+            <div id="star-pattern"></div>
+            <div id="star-gradient-overlay"></div>
+        </div>
+        <div id="stripe-container">
+            <div id="stripe-pattern"></div>
+        </div>
+        
+        <div id="modal-wrapper">
+            <div id="modal">
+                <div id="modal-background"></div>
+                <div id="modal-content">
+                    <div id="modal-message">
+                        <h1 class="sixty-four-font">Simple Transposition Cipher</h1>
+                    </div>
+                    <div>
+                        <label for="key" class="label-class">Key:</label>
+                        <input type="text" id="key">
+                    </div>
+                    <div>
+                        <label for="plain-text" class="label-class">Text to Encrypt/Decrypt:</label>
+                        <input type="text" id="plain-text">
+                    </div>
+                    
+                    <div id="modal-actions">
+                        <button id="encryptBtn" type="button" class="modal-action">
+                            <div class="modal-action-pattern"></div>
+                            <div class="modal-action-fade"></div>
+                            <span class="modal-action-text inter-font">Encrypt</span>
+                        </button>
+                        <button id="decryptBtn" type="button" class="modal-action">
+                            <div class="modal-action-pattern"></div>
+                            <div class="modal-action-fade"></div>
+                            <span class="modal-action-text inter-font">Decrypt</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="magic-mouse-container"></div>
+
+    <div id="cursor">
+        <img src="../images/games/Cursor.webp" alt="Arrow Cursor" />
+        <div id="cursor-eyes">
+            <div class="cursor-eye"></div>
+            <div class="cursor-eye"></div>
+        </div>
+    </div>
+
+    <script src="default.js"></script>
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/nav.js"></script>
+    <script src="../assets/js/load.js"></script>
+    <script>
+        function transposeEncrypt(plainText, key) {
+            const columns = key.length;
+            const rows = Math.ceil(plainText.length / columns);
+            let grid = Array.from({ length: rows }, () => Array(columns).fill(''));
+            let encryptedText = '';
+    
+            let index = 0;
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < columns; col++) {
+                    if (index < plainText.length) {
+                        grid[row][col] = plainText[index++];
+                    }
+                }
+            }
+    
+            const sortedKeyIndices = [...key]
+                .map((char, idx) => ({ char, idx }))
+                .sort((a, b) => a.char.localeCompare(b.char))
+                .map(item => item.idx);
+    
+            for (let col of sortedKeyIndices) {
+                for (let row = 0; row < rows; row++) {
+                    if (grid[row][col]) {
+                        encryptedText += grid[row][col];
+                    }
+                }
+            }
+    
+            return encryptedText;
+        }
+    
+        function transposeDecrypt(encryptedText, key) {
+            const columns = key.length;
+            const rows = Math.ceil(encryptedText.length / columns);
+            let grid = Array.from({ length: rows }, () => Array(columns).fill(''));
+            let decryptedText = '';
+    
+            const sortedKeyIndices = [...key]
+                .map((char, idx) => ({ char, idx }))
+                .sort((a, b) => a.char.localeCompare(b.char))
+                .map(item => item.idx);
+    
+            let index = 0;
+    
+            for (let col of sortedKeyIndices) {
+                for (let row = 0; row < rows; row++) {
+                    if (index < encryptedText.length) {
+                        grid[row][col] = encryptedText[index++];
+                    }
+                }
+            }
+    
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < columns; col++) {
+                    if (grid[row][col]) {
+                        decryptedText += grid[row][col];
+                    }
+                }
+            }
+    
+            return decryptedText;
+        }
+    
+        document.getElementById('encryptBtn').addEventListener('click', () => {
+            const key = document.getElementById('key').value.trim();
+            const text = document.getElementById('plain-text').value.trim();
+    
+            if (key && text) {
+                const encryptedText = transposeEncrypt(text, key);
+                alert('Encrypted Text: ' + encryptedText);
+            } else {
+                alert('Please enter both the text and key.');
+            }
+        });
+    
+        document.getElementById('decryptBtn').addEventListener('click', () => {
+            const key = document.getElementById('key').value.trim();
+            const text = document.getElementById('plain-text').value.trim();
+    
+            if (key && text) {
+                const decryptedText = transposeDecrypt(text, key);
+                alert('Decrypted Text: ' + decryptedText);
+            } else {
+                alert('Please enter both the text and key.');
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Pig-pen</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="default.css" />
+</head>
+<body>
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="app">
+        <div id="star-container">
+            <div id="star-pattern"></div>
+            <div id="star-gradient-overlay"></div>
+        </div>
+        <div id="stripe-container">
+            <div id="stripe-pattern"></div>
+        </div>
+
+        <div id="modal-wrapper">
+            <div id="modal">
+                <div id="modal-background"></div>
+                <div id="modal-content">
+                    <div id="modal-message">
+                        <h1 class="sixty-four-font">Pig Pen Game</h1>
+                        <div id="word-container"></div>
+                        <div id="input-container">
+                            <input type="text" id="guess-input" maxlength="1" placeholder="Guess a letter">
+                            <div class="button-container">
+                                <button class="modal-action" id="guess-button">
+                                    <span class="modal-action-text inter-font">Guess</span>
+                                </button>
+                                <button class="modal-action reset-button">
+                                    <span class="modal-action-text inter-font">Play Again</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p id="message" class="inter-font"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="magic-mouse-container"></div>
+
+        <div id="cursor">
+            <img src="../images/games/Cursor.webp" alt="Arrow Cursor" />
+            <div id="cursor-eyes">
+                <div class="cursor-eye"></div>
+                <div class="cursor-eye"></div>
+            </div>
+        </div>
+        <script src="default.js"></script>
+        <script src="../assets/js/jquery.min.js"></script>
+        <script src="../assets/js/jquery.scrolly.min.js"></script>
+        <script src="../assets/js/browser.min.js"></script>
+        <script src="../assets/js/breakpoints.min.js"></script>
+        <script src="../assets/js/util.js"></script>
+        <script src="../assets/js/main.js"></script>
+        <script src="../assets/js/nav.js"></script>
+        <script src="../assets/js/load.js"></script>
+
+        <script>
+            const words = ["javascript", "html", "css", "programming", "webdev"];
+            let chosenWord, guessedLetters, attemptsLeft;
+        
+            const wordContainer = document.getElementById('word-container');
+            const guessInput = document.getElementById('guess-input');
+            const guessButton = document.getElementById('guess-button');
+            const message = document.getElementById('message');
+            const resetButton = document.querySelector('.reset-button');
+        
+            function startGame() {
+                chosenWord = words[Math.floor(Math.random() * words.length)];
+                guessedLetters = [];
+                attemptsLeft = 6;
+                updateWordDisplay();
+                message.textContent = '';
+                guessInput.value = '';
+                guessButton.disabled = false;
+                guessInput.disabled = false;
+            }
+        
+            function updateWordDisplay() {
+                wordContainer.innerHTML = chosenWord
+                    .split('')
+                    .map(letter => (guessedLetters.includes(letter) ? letter : '_'))
+                    .join(' '); 
+            }
+        
+            function handleGuess() {
+                const guess = guessInput.value.toLowerCase().trim();
+        
+                if (guess.length === 1 && !guessedLetters.includes(guess)) {
+                    guessedLetters.push(guess);
+        
+                    if (!chosenWord.includes(guess)) {
+                        attemptsLeft--;
+                        message.textContent = `Incorrect! You have ${attemptsLeft} chances left.`;
+                    }
+        
+                    if (attemptsLeft <= 0) {
+                        message.textContent = `Game over! The word was "${chosenWord}".`;
+                        guessButton.disabled = true;
+                        guessInput.disabled = true;
+                    } else if (chosenWord.split('').every(letter => guessedLetters.includes(letter))) {
+                        message.textContent = 'Congratulations! You guessed the word!';
+                        guessButton.disabled = true;
+                        guessInput.disabled = true;
+                    }
+        
+                    updateWordDisplay();
+                } else if (guess.length > 1) {
+                    message.textContent = "Please guess only one letter!";
+                } else if (guess.length === 0) {
+                    message.textContent = "Please enter a letter to guess!";
+                } else {
+                    message.textContent = "You've already guessed that letter!";
+                }
+        
+                guessInput.value = '';
+            }
+        
+            function resetGame() {
+                startGame();
+                guessInput.disabled = false;
+            }
+        
+            guessButton.addEventListener('click', handleGuess);
+            resetButton.addEventListener('click', resetGame);
+        
+            document.addEventListener('DOMContentLoaded', function () {
+                startGame();
+            });
+        
+            guessInput.addEventListener('keypress', function (event) {
+                if (event.key === 'Enter') {
+                    handleGuess();
+                }
+            });
+        </script>
+        
+    </div>
+</body>
+</html>

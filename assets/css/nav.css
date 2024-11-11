@@ -1,0 +1,499 @@
+:root {
+    --primary: #353535;
+    --bg: #eef0f4;
+    --secondary: #414546;
+    --accent: #ffcf27;
+    --accent-sim: #eccd22;
+    --accent-sim2: #de9c22;
+    --bg-dull: rgba(255, 255, 255, 0.875);
+    --pri-dull: rgba(0, 0, 0, 0.25);
+    --loading-gif: url('../../images/loaders/light.gif');
+    --primary-stripe-rgb: 230 230 230;
+    --secondary-stripe-rgb: 240 240 240;
+    --baah: black;
+    --arrow: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 512 512'%3E%3Cpath d='M442.53,346.28L293.65,495.16c-0.33,0.33-0.7,0.62-1.05,0.94c-9.16,9.77-22.15,15.9-36.6,15.9 c-14.44,0-27.43-6.13-36.59-15.88c-0.35-0.33-0.72-0.62-1.06-0.96L69.47,346.28c-19.62-19.62-19.62-51.44,0-71.05 c19.62-19.62,51.43-19.62,71.06,0l65.23,65.23V50.24C205.76,22.5,228.25,0,256,0s50.24,22.5,50.24,50.24v290.21l65.23-65.23 c19.62-19.62,51.43-19.62,71.05,0C462.15,294.84,462.15,326.66,442.53,346.28z' fill='%23000000' /%3E%3C/svg%3E");;
+}
+
+[data-theme="dark"] {
+    --primary: #fff;
+    --baah: white;
+    --bg: #000;
+    --secondary: #eef0f4;
+    --accent: rgb(132, 0, 255);
+    --accent-sim: #a142f4;
+    --accent-sim2: #932fd9;
+    --bg-dull: rgba(0, 0, 0, 0.875);
+    --pri-dull: rgba(255, 255, 255, 0.25);
+    --loading-gif: url('../../images/loaders/dark.gif'); 
+    --primary-stripe-rgb: 25 25 25;
+    --secondary-stripe-rgb: 15 15 15;
+    --arrow: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 512 512'%3E%3Cpath d='M442.53,346.28L293.65,495.16c-0.33,0.33-0.7,0.62-1.05,0.94c-9.16,9.77-22.15,15.9-36.6,15.9 c-14.44,0-27.43-6.13-36.59-15.88c-0.35-0.33-0.72-0.62-1.06-0.96L69.47,346.28c-19.62-19.62-19.62-51.44,0-71.05 c19.62-19.62,51.43-19.62,71.06,0l65.23,65.23V50.24C205.76,22.5,228.25,0,256,0s50.24,22.5,50.24,50.24v290.21l65.23-65.23 c19.62-19.62,51.43-19.62,71.05,0C462.15,294.84,462.15,326.66,442.53,346.28z' fill='%23ffffff' /%3E%3C/svg%3E");
+}
+
+[data-theme="simple"] {
+    --primary: #2e2e2e;
+    --bg: #f5f5f5;
+    --secondary: #f5f5f5;
+    --accent: #7f7f7f;
+    --accent-sim: #b0b0b0;
+    --accent-sim2: #a0a0a0;
+    --bg-dull: rgba(240, 240, 240, 0.875);
+    --pri-dull: rgba(128, 128, 128, 0.25);
+    --loading-gif: url('../../images/loaders/simple.gif');
+    --primary-stripe-rgb:white;
+    --secondary-stripe-rgb: #f5f5f5;
+}
+
+.menu {
+    position: fixed; 
+    width: 4rem;
+    height: 95vh; 
+    background-color: var(--bg); 
+    z-index: 2;
+    top: 2.5vh;
+    left: 10px; 
+    border-radius: 0.7rem;
+    transition: 0.3s ease 0.15s;
+    font-family: sans-serif;
+    overflow: hidden;
+    padding-right: 0.2rem;
+}
+
+
+.menu.open {
+    width: 240px;
+}
+
+.menu a {
+    text-decoration: none;
+}
+
+.menu .actionbar {
+    width: 100%;
+    height: 10%;
+    padding-left: 0.7rem;
+    overflow: hidden;
+}
+
+.menu-actionbar-div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0.5rem;
+    transition: 0.3s ease;
+}
+
+.menu .actionbar div button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
+    color: var(--primary);
+    width: 45px;
+    height: 45px;
+    transition: 0.3s ease;
+    font-size: 1rem;
+}
+
+.menu .actionbar div button:hover {
+    background-color: var(--accent);
+}
+
+.menu .actionbar div h3 {
+    width: calc(100% - 45px);
+    text-align: center;
+}
+.menu .optionsBar {
+    overflow: hidden;
+    display: flex;
+    width: 100%;
+    height: 60%;
+    padding: 0 0.5rem; 
+    margin-bottom: 1rem;
+    align-items: center;
+    flex-direction: column;
+}
+
+.menu .optionsBar .menuItem {
+    width: 100%;
+    height: 45px;
+    margin: 0.3rem 0; 
+}
+
+.menu .optionsBar .menuItem .menuOption {
+    font-size: 1rem;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    aspect-ratio: 1;
+    justify-content: space-between; 
+    border-radius: 0.5rem;
+    transition: 0.3s ease;
+    padding: 0 0.6rem; 
+}
+
+.menu button {
+    display: inline-block;
+    min-height: 45px;
+    min-width: 45px;
+    aspect-ratio: 1;
+}
+
+
+.menu .optionsBar .menuItem .menuOption:hover {
+    background-color: var(--accent);
+}
+
+.menu .optionsBar .menuItem .menuOption i {
+    width: 100px;
+    text-align: center;
+    color: var(--primary);
+}
+
+.menu .optionsBar .menuItem .menuOption h5 {
+    flex: 1; 
+    margin-left: 0.5rem;
+}
+
+.menuText {
+    color: var(--secondary);
+    transform: translateX(-250px);
+    opacity: 0;
+    transition: transform 0.3s ease 0.1s;
+}
+
+.menuText.open2 {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.menu .menuBreak {
+    width: 100%;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.menu .menuBreak hr {
+    width: 50%;
+    height: 3px;
+    background-color: var(--primary);
+    border: none;
+    border-radius: 5px;
+}
+
+.menu .menuUser {
+    width: 100%;
+    height: 10px;
+    padding: 4.5rem 0 3rem 0;
+}
+
+.menu .menuUser a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    padding: 0.5rem;
+    position: relative;
+}
+
+.menu .menuUser a div {
+    width: 45px;
+    height: 45px;
+    position: relative;
+    border-radius: 0.5rem;
+}
+
+.menu .menuUser a div img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+}
+
+.menu .menuUser a .Username {
+    width: calc(70% - 45px);
+}
+
+.menu .menuUser a p {
+    width: calc(30% - 45px);
+}
+
+.menu .menuUser a:hover p {
+    animation: animArrow 0.3s ease 2;
+}
+
+@keyframes animArrow {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(5px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.menu .menuUser .userInfo {
+    position: absolute;
+    width: 10rem;
+    height: 8rem;
+    opacity: 0;
+    color: var(--bg);
+    pointer-events: none;
+    top: 58%;
+    left: 1.5rem;
+    transition: 0.3s ease;
+    transform: scale(0);
+    transform-origin: bottom left;
+}
+
+.menu .menuUser .userInfo div {
+    position: relative;
+    width: 100%;
+    height: calc(100% - 20px);
+    box-shadow: 0px 0px 40px rgba(0, 0, 0, 0.3);
+    background-color: var(--primary);
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.menu .menuUser .userInfo div h1 {
+    font-size: 4rem;
+}
+
+.menu .menuUser .userInfo div::before {
+    content: '';
+    position: absolute;
+    bottom: -18px;
+    left: -2px;
+    width: 0;
+    height: 0;
+    border-top: 15px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 15px solid var(--primary);
+    transform: rotate(45deg);
+}
+
+.menu .menuUser:hover .userInfo {
+    pointer-events: all;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.menu .themeBar {
+    overflow: hidden;
+    width: 100%;
+    height: 10%;
+    padding: 0.5rem;
+}
+
+.menu .themeBar div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 0.5rem;
+    transition: 0.3s ease;
+}
+/*
+#themeChangeBtn {
+    position: absolute;
+    bottom: 10px;
+    width: 47px;
+    height: 47px;
+    border-radius: 0.5rem;
+    background-color: var(--accent);
+    color: var(--bg);
+    outline: none;
+    border: none;
+    transition: 0.3s ease;
+}*/
+.menu button {
+    padding:0;
+}
+
+.menu .themeBar div button {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    border-radius: 0.5rem;
+    color: var(--primary);
+    width: 100%;
+    height: 45px;
+    transition: 0.3s ease;
+    font-size: 1rem;
+    padding:0;
+}
+
+.menu .themeBar div button {
+    background-color: var(--accent);
+}
+
+.menu .themeBar div button:hover i,
+.menu .optionsBar .menuItem .menuOption:hover i,
+.menu .actionbar div button:hover i {
+    color: var(--bg);
+}
+
+
+.menu h3, .menu h5, .menu p {
+    width: calc(100% - 45px);
+    text-align: center;
+    margin:0 !important;
+}
+
+@media (max-width: 1180px) {
+    #yohoho {
+    
+        width: 177px;
+        
+    }
+    .menu {
+        width: 100%;
+        height: 60px;
+        top: 0;
+        left: 0;
+        padding-right: 0.7rem;
+        border-radius: 0 0 0.8rem 0.8rem;
+    }
+
+
+    .menu.open {
+        height: auto;
+        width: 100%;
+    }
+
+    .menu .actionbar {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 1rem;
+    }
+
+    ul.optionsBar{
+        margin-bottom: 0 !important;
+    }
+    .menu .menu-actionbar-div {
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .menuText.actionbar-title {
+        display: none;
+    }
+
+    .menu .optionsBar {
+        height: auto;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 0 !important;
+        list-style: none;
+    }
+
+    .menu .menuUser {
+        display: none;
+    }
+
+    .menu .themeBar {
+        display: none;
+    }
+
+    .menuText {
+        transform: translateY(-250px);
+        transition: transform 0.3s ease 0.1s;
+    }
+
+    .menuText.open2 {
+        transform: translateY(0);
+    }
+
+    
+    #menuBtn {
+        display: none;
+    }
+}
+
+
+@media (max-width: 1130px) {
+    #yohoho {
+    
+        width: 100%;
+        
+    }
+    .menuText {
+        display: none;
+    }
+
+    .menu .optionsBar {
+        justify-content: space-between;
+        padding: 0 0.5rem;
+    }
+
+    .menu .menu-icon {
+        font-size: 1.5rem;
+    }
+
+    .menu .actionbar,
+    .menu .optionsBar {
+        padding: 0 0.5rem;
+    }
+
+    .menu .optionsBar {
+        flex-direction: row;
+    }
+    
+    .menu .actionbar {
+        justify-content: center;
+    }
+}
+
+ul li a button, #menu-user-link{
+    text-decoration: none !important;
+}
+
+@keyframes pan {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 100% 0%;
+    }
+}
+body{
+height: 100%;
+width: 100%;
+background-size: 18px 18px;
+background-image: linear-gradient(
+    -45deg,
+    rgb(var(--primary-stripe-rgb)) 25%,
+    rgb(var(--secondary-stripe-rgb)) 25%,
+    rgb(var(--secondary-stripe-rgb)) 50%,
+    rgb(var(--primary-stripe-rgb)) 50%,
+    rgb(var(--primary-stripe-rgb)) 75%,
+    rgb(var(--secondary-stripe-rgb)) 75%,
+    rgb(var(--secondary-stripe-rgb)) 100%
+);
+box-shadow: inset 0rem 0.5rem 2rem 0.25rem rgb(0 0 0 / 40%);
+animation: pan 180s linear infinite;
+
+}

@@ -1,0 +1,334 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Hill Cipher Encryption</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .container {
+            max-width: 900px;
+            width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E2E2E;
+            text-align: center;
+        }
+        h2 {
+            text-align: center;
+        }
+        textarea, input[type="text"] {
+            width: 90%;
+            margin-bottom: 15px;
+            border: 1px solid #88939e;
+            border-radius: 8px;
+            background-color: #f1f8ff;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button {
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #how-to-play-popup, #history-container {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 15px;
+        }
+        #history-content {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h1>Hill Cipher Encryption</h1>
+        <div class="button-container">
+            <button onclick="showHowToPlay()">How to Play</button>
+        </div>
+        <h2>Enter your Plain Text</h2>
+        <div class="input-area">
+            <textarea id="plaintext" placeholder="Enter plaintext"></textarea>
+            <input type="text" id="key" placeholder="Enter 2x2 key matrix (e.g. 1,2,3,4)">
+            <div class="button-container">
+                <button id="encryptButton" onclick="encrypt()">Encrypt</button>
+                <button id="decryptButton" onclick="decrypt()">Decrypt</button>
+            </div>
+        </div>
+        <h2>Output</h2>
+        <div id="output" style="text-align: center;"></div>
+        <div class="button-container">
+            <button onclick="showHistory()">Show History</button>
+            <button onclick="clearHistory()">Clear History</button>
+        </div>
+    </div>
+
+    <div id="how-to-play-popup">
+        <h2>How to Play</h2>
+        <p>In this game, you will be given a plaintext message and a key matrix.</p>
+        <p>Your task is to encrypt or decrypt the plaintext using the Hill cipher with the provided key matrix.</p>
+        <p>To encrypt or decrypt a message, follow these steps:</p>
+        <ol>
+            <li>Enter the plaintext message in the text area.</li>
+            <li>Input the key matrix in the provided format (e.g., 1,2,3,4).</li>
+            <li>Click on the Encrypt button to get the encrypted message or Decrypt to reverse it.</li>
+        </ol>
+        <button onclick="closeHowToPlay()">Close</button>
+    </div>
+
+    <div id="history-container">
+        <h2>History</h2>
+        <div id="history-content"></div>
+        <button onclick="closeHistory()">Close</button>
+    </div>
+
+    <script src="../assets/js/jquery.min.js"></script>
+    <script src="../assets/js/jquery.scrolly.min.js"></script>
+    <script src="../assets/js/browser.min.js"></script>
+    <script src="../assets/js/breakpoints.min.js"></script>
+    <script src="../assets/js/util.js"></script>
+    <script src="../assets/js/main.js"></script>
+    <script src="../assets/js/nav.js"></script>
+    <script src="../assets/js/load.js"></script>
+    <script>
+        function showHowToPlay() {
+            document.getElementById('how-to-play-popup').style.display = 'block';
+        }
+
+        function closeHowToPlay() {
+            document.getElementById('how-to-play-popup').style.display = 'none';
+        }
+
+        function showHistory() {
+            const historyContainer = document.getElementById('history-container');
+            const historyContent = document.getElementById('history-content');
+            const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            historyContent.innerHTML = savedMessages.map(msg => `<p><strong>${msg.type}:</strong> ${msg.message}</p>`).join('');
+            historyContainer.style.display = 'block';
+        }
+
+        function closeHistory() {
+            document.getElementById('history-container').style.display = 'none';
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('messages');
+            alert("History cleared!");
+        }
+
+        function encrypt() {
+            const plaintext = document.getElementById('plaintext').value.replace(/\s+/g, '').toUpperCase();
+            const key = document.getElementById('key').value.split(',').map(Number);
+
+            if (key.length !== 4) {
+                alert("Please enter a valid 2x2 key matrix (e.g., 1,2,3,4).");
+                return;
+            }
+
+            const keyMatrix = [[key[0], key[1]], [key[2], key[3]]];
+
+            if (!isInvertible(keyMatrix)) {
+                alert("The key matrix is not invertible. Please provide a valid matrix.");
+                return;
+            }
+
+            const output = [];
+            const matrixSize = keyMatrix.length;
+
+            for (let i = 0; i < plaintext.length; i += matrixSize) {
+                const block = plaintext.slice(i, i + matrixSize).padEnd(matrixSize, 'X').split('').map(char => char.charCodeAt(0) - 65);
+                const encryptedBlock = multiplyMatrices(keyMatrix, block);
+                const encryptedText = encryptedBlock.map(num => String.fromCharCode((num % 26) + 65)).join('');
+                output.push(encryptedText);
+            }
+
+            const finalOutput = output.join('');
+            document.getElementById('output').innerText = `Encrypted: ${finalOutput}`;
+            saveToHistory('Encryption', `Plaintext: ${plaintext}, Encrypted: ${finalOutput}`);
+        }
+
+        function decrypt() {
+            const ciphertext = document.getElementById('plaintext').value.replace(/\s+/g, '').toUpperCase();
+            const key = document.getElementById('key').value.split(',').map(Number);
+
+            if (key.length !== 4) {
+                alert("Please enter a valid 2x2 key matrix (e.g., 1,2,3,4).");
+                return;
+            }
+
+            const keyMatrix = [[key[0], key[1]], [key[2], key[3]]];
+            const inverseMatrix = inverse(keyMatrix);
+            if (!inverseMatrix) {
+                alert("The key matrix is not invertible. Please provide a valid matrix.");
+                return;
+            }
+
+            const output = [];
+            const matrixSize = inverseMatrix.length;
+
+            for (let i = 0; i < ciphertext.length; i += matrixSize) {
+                const block = ciphertext.slice(i, i + matrixSize).split('').map(char => char.charCodeAt(0) - 65);
+                const decryptedBlock = multiplyMatrices(inverseMatrix, block);
+                const decryptedText = decryptedBlock.map(num => String.fromCharCode((num + 26) % 26 + 65)).join('');
+                output.push(decryptedText);
+            }
+
+            const finalOutput = output.join('');
+            document.getElementById('output').innerText = `Decrypted: ${finalOutput}`;
+            saveToHistory('Decryption', `Ciphertext: ${ciphertext}, Decrypted: ${finalOutput}`);
+        }
+
+        function multiplyMatrices(matrix, vector) {
+            return matrix.map(row => row.reduce((sum, val, idx) => sum + val * vector[idx], 0)).map(num => num % 26);
+        }
+
+        function inverse(matrix) {
+            const determinant = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+            if (determinant === 0) return null;
+
+            const invDet = modInverse(determinant, 26);
+            if (invDet === -1) return null;
+
+            return [
+                [(matrix[1][1] * invDet) % 26, (-matrix[0][1] * invDet) % 26],
+                [(-matrix[1][0] * invDet) % 26, (matrix[0][0] * invDet) % 26]
+            ].map(row => row.map(num => (num + 26) % 26));
+        }
+
+        function modInverse(a, m) {
+            for (let x = 1; x < m; x++) {
+                if ((a * x) % m === 1) return x;
+            }
+            return -1;
+        }
+
+        function isInvertible(matrix) {
+            const determinant = (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]);
+            return determinant !== 0;
+        }
+
+        function saveToHistory(type, message) {
+            const savedMessages = JSON.parse(localStorage.getItem('messages')) || [];
+            savedMessages.push({ type, message });
+            localStorage.setItem('messages', JSON.stringify(savedMessages));
+        }
+    </script>
+</body>
+</html>

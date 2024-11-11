@@ -1,0 +1,174 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mastermind Game for Kids</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: #f0f8ff;
+            height: 100vh;
+        }
+
+        .game-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2em;
+            color: #4b0082;
+        }
+
+        .color-hint {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .color-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+        }
+
+        .input-container {
+            margin-top: 20px;
+        }
+
+        .color-btn {
+            cursor: pointer;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin: 0 5px;
+        }
+
+        .save-btn, .replay-btn, .show-hint-btn {
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: #fff;
+            background-color: #4b0082;
+            border: none;
+        }
+
+        .history-container {
+            margin-top: 20px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .history-item {
+            margin-bottom: 10px;
+            padding: 5px;
+            background: #e9ecef;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Mastermind: Color Match</h1>
+        <div id="color-hint" class="color-hint">
+            <!-- Color hints will appear here -->
+        </div>
+        
+        <div class="input-container">
+            <button class="color-btn" style="background-color: red;" onclick="selectColor('red')"></button>
+            <button class="color-btn" style="background-color: blue;" onclick="selectColor('blue')"></button>
+            <button class="color-btn" style="background-color: yellow;" onclick="selectColor('yellow')"></button>
+            <button class="color-btn" style="background-color: green;" onclick="selectColor('green')"></button>
+        </div>
+        <p id="resultMessage"></p>
+        <button class="save-btn" onclick="saveResult()">Save Result</button>
+        <button class="replay-btn" onclick="replayGame()">Replay</button>
+        <button class="show-hint-btn" onclick="showHint()">Show Hint</button>
+
+        <div id="history-container" class="history-container"></div>
+    </div>
+
+    <script>
+        const colors = ["red", "blue", "yellow", "green"];
+        let solution = [];
+        let userGuesses = [];
+        let score = 0;
+
+        function startGame() {
+            solution = [];
+            userGuesses = []; // reset user guesses on game start
+            for (let i = 0; i < 3; i++) {
+                solution.push(colors[Math.floor(Math.random() * colors.length)]);
+            }
+            console.log("Solution:", solution); // For debugging
+            displayHint();
+        }
+
+        function selectColor(color) {
+            userGuesses.push(color);
+            if (userGuesses.length === solution.length) {
+                checkAnswer();
+            }
+        }
+
+        function checkAnswer() {
+            let correctCount = 0;
+            userGuesses.forEach((color, index) => {
+                if (color === solution[index]) correctCount++;
+            });
+
+            if (correctCount === solution.length) {
+                score++;
+                document.getElementById("resultMessage").textContent = "Congratulations! You guessed correctly!";
+            } else {
+                document.getElementById("resultMessage").textContent = `You got ${correctCount} out of ${solution.length} correct. Try again!`;
+            }
+            userGuesses = [];
+        }
+
+        function saveResult() {
+            let history = localStorage.getItem('gameHistory') ? JSON.parse(localStorage.getItem('gameHistory')) : [];
+            const newResult = { score: score, date: new Date().toLocaleString() };
+            history.push(newResult);
+            localStorage.setItem('gameHistory', JSON.stringify(history));
+            alert('Result saved!');
+        }
+
+        function replayGame() {
+            score = 0;
+            document.getElementById("resultMessage").textContent = '';
+            startGame();
+        }
+
+        function showHint() {
+            document.getElementById("color-hint").innerHTML = "Hint: " + solution.map(() => "❓").join(" ");
+        }
+
+        function displayHint() {
+            document.getElementById("color-hint").innerHTML = "Hint: " + solution.map(() => "❓").join(" ");
+        }
+
+        // Start the game initially
+        startGame();
+    </script>
+</body>
+</html>

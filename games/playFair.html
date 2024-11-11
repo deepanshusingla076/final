@@ -1,0 +1,459 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Vigenere Cipher</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 30px;
+        }
+        .game-container {
+            text-align: center;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+        }
+        h1 {
+            font-size: 2.5em;
+            color: #2E2E2E;
+        }
+        #plaintext, #key {
+            color: #2E2E2E;
+            font-size: 24px;
+            margin: 10px 0;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        #answer {
+
+font-size: 18px;
+text-align: center;
+margin-bottom: 20px;}
+
+        button {
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #feedback {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #2E2E2E;
+        }
+        #history-container {
+            margin-top: 20px;
+            text-align: left;
+            display: none;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+        .history-item {
+            margin: 5px 0;
+            padding: 5px;
+            background: #e9ecef;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item button {
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        #game-over-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        #how-to-play-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 10px;
+            overflow-y: auto;
+            max-height: 80vh;
+        }
+        h2 {
+            margin-bottom: 10px;
+            color: #2E2E2E;
+        }
+        #how-to-play-popup p, #how-to-play-popup ul, #how-to-play-popup ol {
+            margin-bottom: 10px;
+            color: #333;
+        }
+        #how-to-play-popup button {
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="productManagerBtn" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="productManagerBtn" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad menu-icon"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../pay/pay.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fas fa-user-plus menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="orderManagerBtn" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav><br>
+<div class="game-container">
+    <h1>Playfair Cipher Game</h1>
+    <button onclick="showHowToPlay()">How to Play</button>
+    <div id="plaintext"></div>
+    <div id="key"></div>
+    <input type="text" id="answer" placeholder="Your answer here..." />
+    <button onclick="submitAnswer()">Submit Answer</button>
+    <div id="feedback"></div>
+    <div id="history-container"></div>
+    <button onclick="showHistory()">Show History</button>
+    <button onclick="clearHistory()">Clear History</button>
+</div>
+
+<div id="game-over-popup">
+    <h2>Game Over!</h2>
+    <p id="final-message"></p>
+    <p id="total-score"></p>
+    <button onclick="closePopup()">Replay Game</button>
+</div>
+
+<div id="how-to-play-popup">
+    <h2>How to Play</h2>
+    <p>In this game, you will be given a plaintext message and a key.</p>
+    <p>Your task is to encrypt the plaintext using the Playfair cipher with the provided key.</p>
+    <p>The Playfair cipher works with digraphs (pairs of letters). The key is used to create a 5x5 matrix of letters.</p>
+    <p>Note: The letters I and J are considered the same.</p>
+    <p>To encrypt a message, follow these steps:</p>
+    <ol>
+        <li>Create a 5x5 matrix using the key.</li>
+        <li>Divide the plaintext into digraphs (two-letter pairs).</li>
+        <li>Apply the Playfair encryption rules:</li>
+        <ul>
+            <li>If both letters are the same, insert an 'X' between them.</li>
+            <li>If they are in the same row, replace them with letters to their right.</li>
+            <li>If they are in the same column, replace them with letters below.</li>
+            <li>If they form a rectangle, replace them with letters on the same row but at opposite corners.</li>
+        </ul>
+    </ol>
+    <h3>Example:</h3>
+    <p>Let’s say your key is <strong>KEYWORD</strong> and your plaintext is <strong>HELLO</strong>.</p>
+    <p>1. Create the matrix:</p>
+    <pre>
+    K E Y W O
+    R D A B C
+    F G H I/J L
+    M N P Q S
+    T U V X Z
+    </pre>
+    <p>2. Divide the plaintext into digraphs:</p>
+    <pre>
+    HE   LL   OX (insert X for the second L)
+    </pre>
+    <p>3. Encrypt each digraph:</p>
+    <ul>
+        <li>HE -> (Rectangle rule) -> <strong>KL</strong></li>
+        <li>LL -> (Same letters) -> <strong>LX</strong></li>
+        <li>OX -> (Rectangle rule) -> <strong>WB</strong></li>
+    </ul>
+    <p>So the encrypted message is: <strong>KLXWB</strong>.</p>
+    <p>Type your answer in the input box and click "Submit Answer".</p>
+    <button onclick="closeHowToPlay()">Close</button>
+</div>
+
+<script src="../assets/js/jquery.min.js"></script>
+<script src="../assets/js/jquery.scrolly.min.js"></script>
+<script src="../assets/js/browser.min.js"></script>
+<script src="../assets/js/breakpoints.min.js"></script>
+<script src="../assets/js/util.js"></script>
+<script src="../assets/js/main.js"></script>
+<script src="../assets/js/nav.js"></script>
+<script src="../assets/js/load.js"></script>
+<script>
+const questions = [
+    { plaintext: "HELLO", key: "KEYWORD", correctAnswer: "KLXWB" },
+    { plaintext: "PLAYFAIR", key: "CIPHER", correctAnswer: "TIXGRZMS" },
+    { plaintext: "SECURITY", key: "ALGORITHM", correctAnswer: "TACVUNQN" },
+    { plaintext: "ENCRYPTION", key: "KEY", correctAnswer: "GLTNYRLQIB" },
+    { plaintext: "MESSAGE", key: "BLOCK", correctAnswer: "BEPBNLPL" }
+];
+
+let currentQuestionIndex = 0;
+let history = JSON.parse(localStorage.getItem('history')) || [];
+let score = 0;
+const plaintextEl = document.getElementById('plaintext');
+const keyEl = document.getElementById('key');
+const answerInput = document.getElementById('answer');
+const feedbackEl = document.getElementById('feedback');
+const historyList = document.getElementById('history-container');
+const popup = document.getElementById('game-over-popup');
+const finalMessageEl = document.getElementById('final-message');
+const totalScoreEl = document.getElementById('total-score');
+const howToPlayPopup = document.getElementById('how-to-play-popup');
+
+function createMatrix(key) {
+    const matrix = [];
+    const used = new Set();
+    key = key.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+    for (let char of key) {
+        if (!used.has(char)) {
+            used.add(char);
+            matrix.push(char);
+        }
+    }
+    for (let i = 65; i <= 90; i++) {
+        const char = String.fromCharCode(i);
+        if (!used.has(char) && char !== 'J') {
+            used.add(char);
+            matrix.push(char);
+        }
+    }
+    return matrix;
+}
+
+function encrypt(plaintext, key) {
+    const matrix = createMatrix(key);
+    const digraphs = [];
+    plaintext = plaintext.toUpperCase().replace(/J/g, "I").replace(/[^A-Z]/g, "");
+    
+    // Prepare digraphs
+    for (let i = 0; i < plaintext.length; i += 2) {
+        let pair = plaintext[i];
+        if (i + 1 < plaintext.length) {
+            pair += plaintext[i + 1];
+        } else {
+            pair += "X";  // Padding
+        }
+        if (pair[0] === pair[1]) {
+            pair = pair[0] + 'X';  // Insert X between repeated letters
+        }
+        digraphs.push(pair);
+    }
+
+    let ciphertext = '';
+    for (let pair of digraphs) {
+        const [first, second] = pair.split('');
+        const firstPos = matrix.indexOf(first);
+        const secondPos = matrix.indexOf(second);
+        const firstRow = Math.floor(firstPos / 5);
+        const firstCol = firstPos % 5;
+        const secondRow = Math.floor(secondPos / 5);
+        const secondCol = secondPos % 5;
+
+        if (firstRow === secondRow) {
+            // Same row
+            ciphertext += matrix[firstRow * 5 + (firstCol + 1) % 5];
+            ciphertext += matrix[secondRow * 5 + (secondCol + 1) % 5];
+        } else if (firstCol === secondCol) {
+            // Same column
+            ciphertext += matrix[((firstRow + 1) % 5) * 5 + firstCol];
+            ciphertext += matrix[((secondRow + 1) % 5) * 5 + secondCol];
+        } else {
+            // Rectangle swap
+            ciphertext += matrix[firstRow * 5 + secondCol];
+            ciphertext += matrix[secondRow * 5 + firstCol];
+        }
+    }
+    return ciphertext;
+}
+
+function displayQuestion() {
+    const currentQuestion = questions[currentQuestionIndex];
+    plaintextEl.textContent = `Plaintext: ${currentQuestion.plaintext}`;
+    keyEl.textContent = `Key: ${currentQuestion.key}`;
+    answerInput.value = '';
+    feedbackEl.textContent = '';
+    plaintextEl.style.opacity = 1;
+    keyEl.style.opacity = 1;
+}
+
+function submitAnswer() {
+    const currentQuestion = questions[currentQuestionIndex];
+    const correctAnswer = encrypt(currentQuestion.plaintext, currentQuestion.key);
+    const userAnswer = answerInput.value.toUpperCase();
+
+    if (userAnswer === correctAnswer) {
+        score++;
+        feedbackEl.textContent = "Correct!";
+    } else {
+        feedbackEl.textContent = `Incorrect! The correct answer for "${currentQuestion.plaintext}" with key "${currentQuestion.key}" is: ${correctAnswer}`;
+    }
+
+    saveToHistory(currentQuestion.plaintext, currentQuestion.key, userAnswer, correctAnswer);
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        displayQuestion();
+    } else {
+        endGame("You've completed all questions!");
+    }
+}
+
+function saveToHistory(plaintext, key, userAnswer, correctAnswer) {
+    history.push({ plaintext, key, userAnswer, correctAnswer });
+    localStorage.setItem('history', JSON.stringify(history));
+}
+
+function showHistory() {
+    historyList.innerHTML = '';
+    history.forEach((item, index) => {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        historyItem.innerHTML = `Q${index + 1}: ${item.plaintext} (Key: ${item.key}) - Your Answer: ${item.userAnswer}, Correct Answer: ${item.correctAnswer}`;
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.onclick = () => deleteHistoryItem(index);
+        historyItem.appendChild(deleteButton);
+        historyList.appendChild(historyItem);
+    });
+    historyList.style.display = 'block';
+}
+
+function clearHistory() {
+    history = [];
+    localStorage.removeItem('history');
+    showHistory();
+}
+
+function deleteHistoryItem(index) {
+    history.splice(index, 1);
+    localStorage.setItem('history', JSON.stringify(history));
+    showHistory();
+}
+
+function endGame(message) {
+    popup.style.display = 'block';
+    finalMessageEl.textContent = message;
+    totalScoreEl.textContent = `Your score: ${score}/${questions.length}`;
+}
+
+function closePopup() {
+    popup.style.display = 'none';
+    currentQuestionIndex = 0;
+    score = 0;
+    displayQuestion();
+}
+
+function showHowToPlay() {
+    howToPlayPopup.style.display = 'block';
+}
+
+function closeHowToPlay() {
+    howToPlayPopup.style.display = 'none';
+}
+
+// Display the first question on load
+window.onload = displayQuestion;
+</script>
+</body>
+</html>

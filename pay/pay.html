@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Payment</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="../assets/css/toggle/main.css" />
+    <link rel="stylesheet" href="../assets/css/nav.css" />
+    <link rel="icon" href="../images/light-icon.png" />
+    <link rel="stylesheet" href="../assets/css/load.css" />
+    <script src="https://kit.fontawesome.com/0985d929cd.js" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: var(--bg);
+            padding: 40px 25px;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+            width: 950px; 
+            animation: fadeIn 0.7s ease;
+            text-align: left;
+        }
+
+        .title {
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: var(--primary);
+        }
+
+        .subtitle {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            width: 900px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .box {
+            background-color: var(--bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 10px;
+            flex: 1;
+            max-width: calc(33% - 20px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative; 
+        }
+
+        .box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .para {
+            font-size: 20px;
+            color: var(--primary);
+            font-weight: 550;
+        }
+
+        .price {
+            font-size: 24px; 
+            font-weight: 600; 
+            color: var(--primary);
+            background-color: var(--bg); 
+            padding: 10px 15px; 
+            border-radius: 6px; 
+            display: inline-block; 
+            margin-top: 5px; 
+        }
+
+        .popular-badge {
+            position: absolute; 
+            top: -10px;
+            right: -10px;
+            background-color: var(--accent);
+            color: var(--bg);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        }
+
+        .btn {
+            font-size: 18px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            color: var(--bg);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .summary {
+            margin-top: 20px;
+            font-size: 16px;
+            color: var(--primary);
+            text-align: center; 
+        }
+
+        
+        .select-plan {
+            background-color: var(--accent-sim); 
+        }
+        
+        .select-plan:hover {
+            background-color: var(--primary-dull);
+        }
+        .copyright {
+    position: absolute;
+    left: 50%;
+    bottom: 10px;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+} .brr {
+    color:var(--accent);
+    font-size: 40px;
+}
+    </style>
+</head>
+<body class="is-preload">
+    <nav id="menu" class="menu">
+        <div class="actionbar">
+            <div class="menu-actionbar-div">
+                <button id="menuBtn" class="menu-btn">
+                    <i class="fas fa-bars menu-icon"></i>
+                </button>
+                <h3 class="menuText actionbar-title">Dashboard</h3>
+            </div>
+        </div>
+        <ul class="optionsBar">
+            <li class="menuItem">
+                <a href="../index.html" class="menuOption menu-home">
+                    <i class="fas fa-home menu-icon"></i>
+                    <h5 class="menuText menu-label">Home</h5>
+                </a>
+            </li>
+            <li class="menuBreak">
+                <hr class="menu-hr">
+            </li>
+            <li class="menuItem">
+                <a href="../content.html">
+                    <button id="" class="menuOption menu-product">
+                        <i class="fa-solid fa-book menu-icon"></i>
+                        <h5 class="menuText menu-label">Content</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../games.html">
+                    <button id="" class="menuOption menu-game">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <h5 class="menuText menu-label">Games</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../community.html">
+                    <button id="yohoho" class="menuOption menu-community">
+                        <i class="fa-solid fa-users menu-icon"></i>
+                        <h5 class="menuText menu-label">Community</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="#">
+                    <button id="" class="menuOption menu-settings">
+                        <i class="fas fa-cart-shopping menu-icon"></i>
+                        <h5 class="menuText menu-label">Enroll</h5>
+                    </button>
+                </a>
+            </li>
+            <li class="menuItem">
+                <a href="../settings.html">
+                    <button id="" class="menuOption menu-settings">
+                        <i class="fa-solid fa-gear menu-icon"></i>
+                        <h5 class="menuText menu-label">Settings</h5>
+                    </button>
+                </a>
+            </li>
+        </ul>
+        <div class="menuUser">
+            <a href="../dashboard.html" class="menu-user-link">
+                <div class="user-avatar">
+                    <img src="../images/user.jpg" alt="User Image">
+                </div>
+                <h5 class="Username menuText">A. Maurya</h5>
+                <p class="menuText menu-chevron">
+                    <i class="fas fa-chevron-right"></i>
+                </p>
+            </a>
+        </div>
+        <div class="themeBar">
+            <div class="theme-wrapper">
+                <button id="themeChangeBtn" class="theme-btn">
+                    <i class="fas theme-icon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="burra" class="form-container">
+        <h3 class="subtitle">Step 1</h3>
+        <h1 class="title">Choose the plan that's right for you</h1>
+        <div class="container">
+            <div class="box">
+                <i class="brr fas fa-star" ></i>
+                <p class="para">Trial for 10 days</p>
+                <p class="price">Rs 49</p>
+                <button class="btn select-plan" onclick="location.href='fillForm.html'">Select Plan</button>
+            </div>
+            <div class="box">
+                <i class="brr fas fa-calendar-alt" ></i>
+                <p class="para">Monthly</p>
+                <p class="price">Rs 499</p>
+                <button class="btn select-plan" onclick="location.href='fillForm.html'">Select Plan</button>
+            </div>
+            <div class="box">
+                <i class="brr fas fa-calendar-check" ></i>
+                <p class="para">Yearly</p>
+                <p class="price">Rs 4999</p>
+                <div class="popular-badge">Most Popular</div> 
+                <button class="btn select-plan" onclick="location.href='fillForm.html'">Select Plan</button>
+            </div>
+        </div>
+        <p class="summary">You can always change your plan later!</p>
+    </div>
+    <!-- Copyright -->
+		<div class="copyright">&copy;All rights reserved. <a href="#">CodeBreakers</a>.</div>
+
+
+		<!-- Scripts -->
+		<script src="../assets/js/jquery.min.js"></script>
+		<script src="../assets/js/jquery.scrolly.min.js"></script>
+		<script src="../assets/js/browser.min.js"></script>
+		<script src="../assets/js/breakpoints.min.js"></script>
+		<script src="../assets/js/util.js"></script>
+		<script src="../assets/js/main.js"></script>
+		<script src="../assets/js/nav.js"></script>
+		<script src="../assets/js/quiz.js"></script>
+        <script src="../assets/js/load.js"></script>
+        <script>
+            
+        </script>
+</body>
+</html>
